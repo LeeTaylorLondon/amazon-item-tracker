@@ -1,4 +1,2 @@
-https://www.amazon.co.uk/Attachcooking-Replacement-Stainless-Flavorizer-Kenmore/dp/B07NJ9VF78/ref=sr_1_1_sspa?_encoding=UTF8&c=ts&dchild=1&keywords=Outdoor+Barbecue+Replacement+Parts&qid=1598524774&s=outdoors&sr=1-1-spons&ts_id=4295679031&psc=1&spLa=ZW5jcnlwdGVkUXVhbGlmaWVyPUEzMkg1RUM5OEVMQUNVJmVuY3J5cHRlZElkPUEwNTc3NTUwSU02U05aWFpCTk5BJmVuY3J5cHRlZEFkSWQ9QTAxMDQ3NzMzTjcwREwwM0g1Tk5IJndpZGdldE5hbWU9c3BfYXRmJmFjdGlvbj1jbGlja1JlZGlyZWN0JmRvTm90TG9nQ2xpY2s9dHJ1ZQ==,50.00
-https://www.amazon.co.uk/1917-Blu-ray-Region-Free/dp/B082YQ1J4N?pf_rd_r=DPHAQHPND1SBNG8ATMKF&pf_rd_p=f3d41420-383a-4362-a245-a912baa942e0&pd_rd_r=a922ccee-d58e-46bd-8e58-6c9912b22e8d&pd_rd_w=0NBMP&pd_rd_wg=s2zew&ref_=pd_gw_crs_zg_bs_283926,5.10
-https://www.youtube.com,0.001
-www.youtube.com,0.01
+https://www.amazon.co.uk/gp/product/B01C9OCOX0?pf_rd_r=E5NMK5ET4076359QPCVD&pf_rd_p=e632fea2-678f-4848-9a97-bcecda59cb4e,100.00
+https://www.amazon.co.uk/Elements-Programming-Interviews-Python-Insiders/dp/1537713949/ref=sr_1_1?dchild=1&keywords=python+interview&qid=1598715888&sr=8-1,21.00,10000
