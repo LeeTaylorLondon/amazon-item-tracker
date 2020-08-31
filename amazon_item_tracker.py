@@ -9,13 +9,16 @@
 import re
 import time
 import requests
+import email_component
+from program_help import ait_help
 from registry import Registry
 from typing import List
 from typing import Dict
 from typing import Tuple
 from bs4 import BeautifulSoup as BS
 
-INTERVAL = 15
+
+INTERVAL = 3600
 HEADERS = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.135 Safari/537.36"}
 REG = Registry()
 
@@ -27,7 +30,7 @@ def main_menu_text() -> None:
     print('_____________________')
     print('1 -> Ping Prices')
     print('2 -> Configure')
-    print('3 -> Monitor Prices')
+    print('3 -> Monitor Prices [Email]')
     print('4 -> Help/Guide')
     print('_____________________')
     pass
@@ -108,7 +111,7 @@ def analyze_items(lines: List[str]) -> Tuple[str, str, str]:
         yields: (amazon_item_name: str, amazon_price: str, desired_price: str)
     """
 
-    for line in lines:        
+    for line in lines:
         parts = line.split(',')  # [<url_to_item: str>, <desired_price: float>]
         link, desired_price = parts[0], parts[1]
         
@@ -133,7 +136,6 @@ def analyze_items(lines: List[str]) -> Tuple[str, str, str]:
         else:                   # BOOK BRANCH
             pb_price, ke_price = analyze_book(soup)
             desired_pb_price, desired_ke_price = parts[1], parts[2]
-            #print(item_name, pb_price, ke_price, desired_pb_price, desired_ke_price)
             yield(soup.title.get_text(), pb_price, ke_price, desired_pb_price, desired_ke_price)
     pass
 
@@ -142,9 +144,9 @@ def ping_prices() -> None:
     """ returns: dictionary 'name: str' : 'a_price: float' for each item """
     
     non_books, books = {}, {}
-    links = REG.load_links()
+    links = REG.load_links()[0]
     # for each specified link the item_name and a_price is extracted, printed and returned
-    data = analyze_items(links[0])
+    data = analyze_items(links)
     for loops in range(len(links)):
         # an invalid links leads to skipping an iteration which in turn raises StopIteration
         try:
@@ -159,16 +161,22 @@ def ping_prices() -> None:
     for k,v in non_books.items():
         print(f"\n<NAME  -> {k}>\n<PRICE -> {v}>")
     for k,v in books.items():
-        print(f"\n<NAME            -> {k}>\n<PAPERBACK PRICE -> {output[1]}>\n<KINDLE PRICE    -> {output[2]}>")
+        print(f"\n<NAME            -> {k}>\n<PAPERBACK PRICE -> {v[0]}>\n<KINDLE PRICE    -> {v[1]}>")
     pass
 
 
-# TODO: when func, check_price(), returns <true>, send email to <specified email>
-# TODO: convert to continuous loop which compares prices every 50 to 60 seconds
-# TODO: allow user to specify time interval when to check prices
 def monitor_prices() -> None:
     """ continuously compares prices approx. every 50sec and sends an email when
         the price of an item has been reduced to a specified desired price """
+
+    email_component.instructions()
+    try:
+        sender_email    = email_component.set_sender_email()
+        sender_email_pw = email_component.set_sender_pw()
+        receiver_email  = email_component.set_receiver_email()
+    except TypeError as e:
+        print(e)
+        return
 
     while True:    
         lines = REG.load_links()[0]     # [str1, str2, str3, ...] -> strX = "<URL>,<D_PRICE>"
@@ -183,17 +191,25 @@ def monitor_prices() -> None:
             # non-book comparison
             print()
             if(len(output)==3): 
-                print("NB good") if(check_price(output[2], output[1])) else print("NB not good")
+                if(check_price(output[2], output[1])):
+                    email_component.send_email(receiver_email, sender_email,
+                                               sender_email_pw, {output[0]})                
             # book paperback and kindle comparison
             elif(len(output)==5):
-                print("PB good") if(check_price(output[3], output[1])) else print("PB not good")
-                print("KE good") if(check_price(output[4], output[2])) else print("KE not good")
+                #print("PB good") if(check_price(output[3], output[1])) else print("PB not good")
+                #print("KE good") if(check_price(output[4], output[2])) else print("KE not good")
+                if(check_price(output[3], output[1])):
+                    email_component.send_email(receiver_email, sender_email,
+                                               sender_email_pw, {output[0]})
+                if(check_price(output[4], output[1])):
+                    email_component.send_email(receiver_email, sender_email,
+                                               sender_email_pw, {output[0]})
         time.sleep(INTERVAL)
     pass
 
 
 def main() -> None:
-    options = {1: ping_prices, 2: REG.reg_menu, 3: monitor_prices}
+    options = {1: ping_prices, 2: REG.reg_menu, 3: monitor_prices, 4: ait_help}
     while True:
         # try-except prevents -> crashing upon invalid input
         try:

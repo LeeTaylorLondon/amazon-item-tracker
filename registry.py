@@ -29,12 +29,12 @@ class Registry:
 
     def reg_menu_text(self) -> None:
         print("\n_______________________________")        
-        print("[Please type 1, 2, or 3...]")
+        print("[Please type 1, 2, 3, or 4]")
         print("_______________________________")
-        print("1 -> [View] Registry")
-        print("2 -> [Add] URL to registry")
+        print("1 -> [View]   Registry")
+        print("2 -> [Add]    URL to registry")
         print("3 -> [Remove] URL from registry")
-        print("4 -> [Exit] Return to main menu")
+        print("4 -> [Exit]   Return to main menu")
         print("_______________________________")
         pass
 
@@ -50,7 +50,7 @@ class Registry:
         urls = []
         for line in lines:
             urls.append(line.split(',')[0])
-
+            
         return lines, urls
 
 
@@ -142,8 +142,10 @@ class Registry:
 
     def reg_menu(self) -> None:
         self.view = True
-        options = {1: self.view_registry, 2: self.add_registry,
-                   3: self.delete_registry, 4: self.set_view_false}
+        options = { 1: self.view_registry, 
+                    2: self.add_registry,
+                    3: self.delete_registry,
+                    4: self.set_view_false}
         
         while(self.view is True):
             self.reg_menu_text()
